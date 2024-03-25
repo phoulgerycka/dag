@@ -1,4 +1,4 @@
-import graph2
+from graph2 import graph, dag, GNode
 import ast
 import inspect
 import time
@@ -10,8 +10,6 @@ import inspect
 from collections import namedtuple
 from typing import Dict, List
 from matplotlib import pyplot as plt
-
-graph = Graph()
 
 def dictDeepCopy(d):
     return {k : GNode(v.value, v.children) for k, v in d.items()}
@@ -67,20 +65,21 @@ def f():
     return (-expensive_function(7))
 
 def simulate():
-    print(a())
+    graph.clear()
+    print(a()) # 46
     
     with Layer() as l:
         graph.tweak('d', -1)
-        print(a())
+        print(a()) # 59 inside layer
     
-    print(a())
+    print(a()) # 46 outside layer
     
     with l:
-        print(a())
+        print(a()) # 59 back inside layer
         graph.tweak('c', 8, 1)
-        print(a())
+        print(a()) # 74 inside layer
     
     with Layer():
         graph.tweak('d', 4)
-        print(a())
-    print(a())
+        print(a()) # 59 inside different layer
+    print(a()) # 46 outside the second layer too

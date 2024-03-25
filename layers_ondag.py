@@ -1,5 +1,5 @@
-import graph2
-import layers
+from graph2 import graph, dag
+from layers import *
 import ast
 import inspect
 import time
@@ -31,19 +31,19 @@ def g2():
         graph.tweak('f', 10)
         return a()
 
-def gsim12():
+def g_then_g2():
     graph.clear()
-    print(a())
-    print(g())
-    print(a())
-    print(g2())
+    print(a()) # 46
+    print(g()) # 59
+    print(a()) # 46
+    print(g2()) # 110
     
-def gsim21():
+def g2_then_g_hm():
     graph.clear()
-    print(a())
-    print(g2())
-    print(a())
-    print(g())
+    print(a()) # 46
+    print(g2()) # 110
+    print(a()) # 46
+    print(g()) # 110
 
 class FLayer:
     def __init__(self):
@@ -84,18 +84,18 @@ def fg2():
         return a()
 
 
-def fgsim12():
+def frozen_g_then_g2():
     graph.clear()
     graph.trace_calls = False
     print(a())
     print(fg())
     print(a())
-    print(fg2())
+    print(fg2()) # fail
     
-def fgsim21():
+def frozen_g2_then_g():
     graph.clear()
     graph.trace_calls = False
     print(a())
-    print(fg2())
+    print(fg2()) # fail earlier
     print(a())
     print(fg())
